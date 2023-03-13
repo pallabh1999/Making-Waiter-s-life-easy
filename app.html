@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making Waiter's life easy</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+    <!-- action is an end point where all the data of forms gets submitted -->
+    <form onsubmit="saveToLocalStorage(event)">
+
+       <label>choosePrice</label>
+        <input type="text" name="table" id="choosePrice" required />
+
+        <label>chooseDish</label>
+        <input type="text" name="dish" id="chooseDish" required />
+
+
+    <label for="choose">ChooseTable</label>
+    <select name="mytable" id="choose">
+        
+    <option value="table1">table 1</option>
+    
+    <option value="table2">table 2</option>
+    
+    <option value="table3" selected>table 3</option>
+    </select>
+    <input type="submit" value="Add to bill">
+    </form>
+    <h1>ORDERS:</h1>
+    <!-- const table1 = document.getElementById("table1");
+    const table2 = document.getElementById("table2");
+    const table3 = document.getElementById("table3"); -->
+
+<ul id="users"></ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+<script>
+    function saveToLocalStorage(event) {
+            // to prevent from unecessary reloading
+            event.preventDefault();
+            var choosePrice = event.target.table.value;
+            var chooseDish = event.target.dish.value;
+            var chooseTable =event.target.mytable.value;
+            // localStorage.setItem('username', name);
+            // localStorage.setItem('emailid', email);
+
+
+            var myobj = {
+                choosePrice,
+                chooseDish,
+                chooseTable
+            }
+          
+            axios.post("https://crudcrud.com/api/515caf1d6c344cf38e3e16d0bade2637/restaurantbill",myobj)
+            .then((response)=>{
+                showUserOnScreen(response.data)
+                console.log(response)
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+
+        //   localStorage.setItem(myobj.choosePrice,chooseDish,chooseTable,JSON.stringify(myobj))
+        //    showUserOnScreen(myobj)
+        }
+        window.addEventListener("DOMContentLoaded",()=>{
+         
+            axios.get("https://crudcrud.com/api/515caf1d6c344cf38e3e16d0bade2637/restaurantbill")
+            .then((response)=>{
+                console.log(response)
+
+
+                for(var i=0;i<response.data.length;i++)
+                {
+                    showUserOnScreen(response.data[i])
+                }
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+
+            // const localStoragemyobj =localStorage;
+            // const localStoragekeys = Object.keys(localStoragemyobj)
+
+            // for(var i=0;i<localStoragekeys.length;i++)
+            // {
+            //     const key =localStoragekeys[i]
+            //     const userDetailsString = localStoragemyobj[key];
+            //     const userDetailsmyobj = JSON.parse(userDetailsString);
+            //     showUserOnScreen(userDetailsmyobj)
+            // }
+        })
+
+         function showUserOnScreen(myobj){
+             var parentElement = document.getElementById("users");
+             var childElement = document.createElement('li')
+             childElement.textContent = myobj.choosePrice +'-'+myobj.chooseDish+'-'+myobj.chooseTable
+             parentElement.appendChild(childElement)
+
+
+             var deletebutton = document.createElement('input')
+             deletebutton.type = "button"
+             deletebutton.value = 'delete'
+             deletebutton.onclick = ()=>{
+                
+                localStorage.removeItem(myobj.choosePrice)
+                
+
+                parentElement.removeChild(childElement)
+             }
+             childElement.appendChild(deletebutton)
+             parentElement.appendChild(childElement)
+
+        //      if(user.choose==="table1"){
+        //         table1.innerHTML = table1.innerHTML +
+        //         `<li class ="table1" id="${user.id}">${user.choosePrice}-${user.chooseDish}-${user.chooseTable}
+        // <button class ="btn1" onClick="deleteuser('${user.id}','${user.choosePrice}')">Delete</button</li>`;
+
+        // }
+        //     else if(user.choose==="table2"){
+        //         table2.innerHTML = table2.innerHTML +
+        //         `<li class ="table2" id="${user.id}">${user.choosePrice}-${user.chooseDish}-${user.chooseTable}
+        // <button class ="btn1" onClick="deleteuser('${user.id}','${user.choosePrice}')">Delete</button</li>`;
+        //      }
+
+        //      else{
+        //         table3.innerHTML = table3.innerHTML +
+        //         `<li class ="table3" id="${user.id}">${user.choosePrice}-${user.chooseDish}-${user.chooseTable}
+        // <button class ="btn1" onClick="deleteuser('${user.id}','${user.choosePrice}')">Delete</button</li>`;
+        //      }
+        //  }
+
+         async function deleteuser(user,chooseTable){
+
+            axios.delete("https://crudcrud.com/api/515caf1d6c344cf38e3e16d0bade2637/restaurantbill")
+            .then((response)=>{
+                // console.log(response)
+             removeItemScreen(user,chooseTable);
+             console.log(response);
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+         }
+// function removeItemScreen(user,chooseTable){
+//     // const parent1 = document.getElementById("table1");
+//     // const parent2 = document.getElementById("table2");
+//     // const parent3 = document.getElementById("table3");
+//     const ele = document.getElementById(user);
+
+//     if(chooseTable === "table1")
+//     {
+//         parent.removeChild(ele);
+//     }else if(chooseTable === "table2")
+//     {
+//         parent.removeChild(ele);
+//     }else{
+//         parent.removeChild(ele);
+//     }
+}
+
+</script>
+</body>
+</html>
