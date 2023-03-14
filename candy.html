@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stock management system for candy shop</title>
+</head>
+<body>
+    <h1>Candy Shop Stock Management Tool</h1>
+    
+    <div id="inventory">
+      <h2>Inventory</h2>
+      <table>
+        <tr>
+          <th>Candy Name</th>
+          <th>Quantity in Stock</th>
+          <th>Price per Unit</th>
+        </tr>
+        <tr>
+          <td>Gummy Bears</td>
+          <td id="gummyBearsStock">50</td>
+          <td>1 rs</td>
+        </tr>
+        <tr>
+          <td>Chocolate Bar</td>
+          <td id="chocolateBarStock">30</td>
+          <td>2 rs</td>
+        </tr>
+        <tr>
+          <td>Lollipops</td>
+          <td id="lollipopsStock">20</td>
+          <td>3 rs</td>
+        </tr>
+      </table>
+    </div>
+    
+    <div id="transactions">
+      <h2>Transactions</h2>
+      <form>
+        <label for="candySelect">Select Candy:</label>
+        <select id="candySelect">
+          <option value="gummyBears">Gummy Bears</option>
+          <option value="chocolateBar">Chocolate Bar</option>
+          <option value="lollipops">Lollipops</option>
+        </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity">
+        <button type="button" id="sellButton">Sell</button>
+      </form>
+    </div>
+</body>
+<ul id="users"></ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+<script>
+    function saveToLocalStorage(event) {
+            // to prevent from unecessary reloading
+            event.preventDefault();
+            var candySelect = event.target.candySelect.value;
+            // var number = event.target..value;
+            // var chooseTable =event.target.mytable.value;
+            // localStorage.setItem('username', name);
+            // localStorage.setItem('emailid', email);
+
+
+            var myobj = {
+                candySelect
+            }
+          
+            axios.post("https://crudcrud.com/api/515caf1d6c344cf38e3e16d0bade2637/candyshop",myobj)
+            .then((response)=>{
+                showUserOnScreen(response.data)
+                console.log(response)
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+
+        //   localStorage.setItem(myobj.choosePrice,chooseDish,chooseTable,JSON.stringify(myobj))
+        //    showUserOnScreen(myobj)
+        }
+        window.addEventListener("DOMContentLoaded",()=>{
+         
+            axios.get("https://crudcrud.com/api/515caf1d6c344cf38e3e16d0bade2637/candyshop")
+            .then((response)=>{
+                console.log(response)
+
+
+                for(var i=0;i<response.data.length;i++)
+                {
+                    showUserOnScreen(response.data[i])
+                }
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+
+            // const localStoragemyobj =localStorage;
+            // const localStoragekeys = Object.keys(localStoragemyobj)
+
+            // for(var i=0;i<localStoragekeys.length;i++)
+            // {
+            //     const key =localStoragekeys[i]
+            //     const userDetailsString = localStoragemyobj[key];
+            //     const userDetailsmyobj = JSON.parse(userDetailsString);
+            //     showUserOnScreen(userDetailsmyobj)
+            // }
+        })
+
+         function showUserOnScreen(myobj){
+             var parentElement = document.getElementById("users");
+             var childElement = document.createElement('li')
+             childElement.textContent = myobj.candySelect 
+             parentElement.appendChild(childElement)
+
+             var sellbutton = document.createElement('input')
+             sellbutton.type = "button"
+             sellbutton.value = 'add'
+             sellbutton.onclick = ()=>{
+                
+                localStorage.addChild(myobj.candySelect)
+                
+
+                parentElement.addChild(childElement)
+             }
+             childElement.appendChild(deletebutton)
+
+            
+             parentElement.appendChild(childElement)
+
+       
+             const inventory = document.getElementById("inventory");
+const gummyBearsStock = document.getElementById("gummyBearsStock");
+const chocolateBarStock = document.getElementById("chocolateBarStock");
+const lollipopsStock = document.getElementById("lollipopsStock");
+
+
+}
+
+</script>
+</html>
